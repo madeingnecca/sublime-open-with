@@ -13,11 +13,16 @@ class OpenWithCommand(sublime_plugin.WindowCommand):
                                  'Open With',
                                  'Side Bar.sublime-menu')
 
+        # This plugin uses the same configuration as SideBarEnhancements.
+        if not os.path.exists(conf_path):
+            sublime.error_message('Cannot find {0}. Be sure you have SideBarEnhancements plugin installed.'.format(conf_path))
+            return
+
         f = open(conf_path, 'r')
         data = f.read()
         f.close()
 
-        # Remove comments before loading json.
+        # Python json library does not like comments in json.
         data = re.sub(r'//.*', '', data)
         conf = json.loads(data, strict=False)
 
